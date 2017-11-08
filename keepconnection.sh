@@ -33,7 +33,7 @@ do
   if [ ! -z "${connected}" ]; then
     echo "reconnecting ...."
     newIP=`reconnect`
-    # if ip changed, upload the new ip address to githup
+    # if ip changed, upload the new ip address to github
     if [ ! -z ${newIP} ] && [ ${newIP} != ${IP} ];then
       echo Current IP:${newIP}
       IP=${newIP}
