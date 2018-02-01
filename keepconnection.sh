@@ -3,7 +3,7 @@
 # Author            : orglanss <orglanss@gmail.com>
 # Date              : 22.09.2017
 # Last Modified Date: 01.02.2018
-# Last Modified By  : orglanss <orglanss@gmail.com>
+# Last Modified By  : neal <orglanss@gmail.com>
 # This script try to keep the connection to the internet
 # NOTE              : Run with sudo
 
@@ -22,29 +22,35 @@ cat /tmp/mentohust.log|grep '使用IP'|grep -o '[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*'|
 # param1 is ipaddress
 function upload(){
 ipaddr=$1
-./update.sh ${ipaddr}
+if [ -z `./update.sh ${ipaddr}|grep "fatal\|error"` ];then
+  UPLOAD_SUCCESS=true;
+else
+  UPLOAD_SUCCESS=false;
+fi
 }
 
-while ((1));
+while (true);
 do
 {
   # test connection stat
   connected=$(ping -w 4 baidu.com 2>&1| grep "100% packet loss\|unknown host" ); 
   if [ ! -z "${connected}" ]; then
-    echo "reconnecting ...."
+    DATE=`date '+%Y-%m-%d %H:%M:%S'`
+    echo "${DATE} reconnecting ...."
     curIP=`reconnect`
-    while [ -z ${curIP}]
+    while [ -z ${curIP} ]
     do
       # get ip failed, retry 
       curIP=`reconnect`
     done
+    # if ip changed, upload the new ip address to github
+    if [ ${curIP} != ${IP} ];then
+      echo Current IP:${curIP}
+      IP=${curIP}
+      upload ${IP}
+    fi 
   fi
-  # if ip changed, upload the new ip address to github
-  if [ ! -z ${newIP} ] && [ ${newIP} != ${IP} ];then
-    echo Current IP:${newIP}
-    IP=${newIP}
-    upload ${IP}
-  fi      
+       
   # if upload failed, retry
   if [ ! ${UPLOAD_SUCCESS} ]; then
     upload ${IP}
