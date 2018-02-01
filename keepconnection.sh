@@ -55,7 +55,7 @@ do
   if [ ! ${UPLOAD_SUCCESS} ]; then
     upload ${IP}
   fi
-  # wait for a minute befor test connection again
+  # wait for a minute before test connection again
   sleep 60
 }
 done
