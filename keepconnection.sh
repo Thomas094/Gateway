@@ -10,16 +10,21 @@
 
 IP="115.156.156.183"
 # whether the upload is succeed
-UPLOAD_SUCCESS=true
+UPLOAD_SUCCESS=false
 LOG_FILE=/tmp/keepconnection.log
 
 # change to project directory
 cd $(dirname $(realpath $0))
 # reconnect internet and output ipaddress using stdout 
 function reconnect(){
+  DATE=`date '+%Y-%m-%d %H:%M:%S'`
+  echo "${DATE} reconnecting ...."
   mentohust -k1 -b3
 # wait for connection finished
   sleep 10
+}
+
+function getip(){
   cat /tmp/mentohust.log|grep '使用IP'|grep -o '[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*'|sed -n '2p'
 }
 
@@ -40,24 +45,26 @@ function keepconnect(){
   # test connection stat
   connected=$(ping -w 4 baidu.com 2>&1| grep "100% packet loss\|unknown host" ); 
   if [ ! -z "${connected}" ]; then
-    DATE=`date '+%Y-%m-%d %H:%M:%S'`
-    echo "${DATE} reconnecting ...."
-    curIP=`reconnect`
-    while [ -z ${curIP} ]
+    reconnect
+    curIP=`getip`
+    while [ -z "${curIP}" ]
     do
       # get ip failed, retry 
-      curIP=`reconnect`
+      reconnect
+      curIP=`getip`
     done
+    echo "Current IP:${curIP}"
     # if ip changed, upload the new ip address to github
     if [ ${curIP} != ${IP} ];then
-      echo Current IP:${curIP}
       IP=${curIP}
       upload ${IP}
     fi 
   fi
        
   # if upload failed, retry
-  if [ ! ${UPLOAD_SUCCESS} ]; then
+  if ! ${UPLOAD_SUCCESS}; then
+    echo "uploading "
+    IP=`getip`
     upload ${IP}
   fi
 }
