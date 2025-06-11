@@ -1,9 +1,9 @@
 #!/bin/bash
 # File              : add_startup.sh
-# Author            : neal <orglanss@gmail.com>
+# Author            : neal 
 # Date              : 05.02.2018
 # Last Modified Date: 05.02.2018
-# Last Modified By  : neal <orglanss@gmail.com>
+# Last Modified By  : neal 
 # Note: run as root
 
 chmod 755 keepconnection.sh
