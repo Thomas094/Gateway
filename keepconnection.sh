@@ -1,9 +1,9 @@
 #!/bin/bash
 # File              : keepconnection.sh
-# Author            : orglanss <orglanss@gmail.com>
+# Author            : neal
 # Date              : 22.09.2017
 # Last Modified Date: 05.02.2018
-# Last Modified By  : neal <orglanss@gmail.com>
+# Last Modified By  : neal 
 # This script try to keep the connection to the internet
 # NOTE              : Run with sudo
 
