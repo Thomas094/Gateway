@@ -1,9 +1,9 @@
 #!/bin/bash
 # File              : Gateway/update.sh
-# Author            : orglanss <orglanss@gmail.com>
+# Author            : neal
 # Date              : 08.11.2017
 # Last Modified Date: 08.11.2017
-# Last Modified By  : orglanss <orglanss@gmail.com>
+# Last Modified By  : neal
 
 if [ $# != 1 ]; then
   echo Usage: $0 IP
